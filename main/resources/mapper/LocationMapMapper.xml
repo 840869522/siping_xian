@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.LocationMapMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.LocationMap">
+        <id property="location_code" column="location_code" jdbcType="VARCHAR"/>
+        <result property="id" column="id" jdbcType="OTHER"/>
+        <result property="location_code_x" column="location_code_x" jdbcType="OTHER"/>
+        <result property="location_code_y" column="location_code_y" jdbcType="OTHER"/>
+        <result property="location_code_z" column="location_code_z" jdbcType="OTHER"/>
+        <result property="location_code_d" column="location_code_d" jdbcType="OTHER"/>
+        <result property="location_area" column="location_area" jdbcType="OTHER"/>
+        <result property="pallet_code" column="pallet_code" jdbcType="VARCHAR"/>
+        <result property="warehouse" column="warehouse" jdbcType="VARCHAR"/>
+        <result property="warehouse_type" column="warehouse_type" jdbcType="VARCHAR"/>
+        <result property="height" column="height" jdbcType="OTHER"/>
+        <result property="volume" column="volume" jdbcType="OTHER"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        location_code,id,location_code_x,
+        location_code_y,location_code_z,location_code_d,
+        location_area,pallet_code,warehouse,
+        warehouse_type,height,volume,
+        status,udf01,udf02,
+        udf03,udf04,udf05,
+        creator,create_time,updater,
+        update_time
+    </sql>
+</mapper>

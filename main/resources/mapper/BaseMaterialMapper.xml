@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.BaseMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.base.BaseMaterial">
+        <id property="id" column="id" jdbcType="OTHER"/>
+        <result property="material_code" column="material_code" jdbcType="VARCHAR"/>
+        <result property="material_name" column="material_name" jdbcType="VARCHAR"/>
+        <result property="material_type" column="material_type" jdbcType="VARCHAR"/>
+        <result property="supplier" column="supplier" jdbcType="VARCHAR"/>
+        <result property="material_spec" column="material_spec" jdbcType="VARCHAR"/>
+        <result property="material_unit" column="material_unit" jdbcType="VARCHAR"/>
+        <result property="lengths" column="lengths" jdbcType="OTHER"/>
+        <result property="wide" column="wide" jdbcType="OTHER"/>
+        <result property="hight" column="hight" jdbcType="OTHER"/>
+        <result property="weight" column="weight" jdbcType="OTHER"/>
+        <result property="material_storage_area" column="material_storage_area" jdbcType="VARCHAR"/>
+        <result property="draw_no" column="draw_no" jdbcType="VARCHAR"/>
+        <result property="certificate" column="certificate" jdbcType="VARCHAR"/>
+        <result property="quality" column="quality" jdbcType="OTHER"/>
+        <result property="min_stock" column="min_stock" jdbcType="OTHER"/>
+        <result property="stack_type" column="stack_type" jdbcType="VARCHAR"/>
+        <result property="stack_no" column="stack_no" jdbcType="OTHER"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="equip_code" column="equip_code" jdbcType="VARCHAR"/>
+        <result property="equip_name" column="equip_name" jdbcType="VARCHAR"/>
+        <result property="org_material_type" column="org_material_type" jdbcType="VARCHAR"/>
+        <result property="org_material_code" column="org_material_code" jdbcType="VARCHAR"/>
+        <result property="issingle" column="issingle" jdbcType="BOOLEAN"/>
+        <result property="material_price" column="material_price" jdbcType="NUMERIC"/>
+
+
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,material_code,material_name,
+        material_type,supplier,material_spec,
+        material_unit,lengths,wide,
+        hight,weight,material_storage_area,
+        draw_no,certificate,quality,
+        min_stock,stack_type,stack_no,
+        status,remark,udf01,
+        udf02,udf03,udf04,
+        udf05,creator,create_time,
+        updater,update_time,equip_code,
+        equip_name,org_material_type,org_material_code,
+        issingle,material_price
+    </sql>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.InvenMaterialLocationmapMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.InvenMaterialLocationmap">
+            <result property="material_code" column="material_code" jdbcType="VARCHAR"/>
+            <result property="material_name" column="material_name" jdbcType="VARCHAR"/>
+            <result property="pallet_code" column="pallet_no" jdbcType="VARCHAR"/>
+            <result property="location_code" column="location_code" jdbcType="VARCHAR"/>
+            <result property="batch" column="batch" jdbcType="VARCHAR"/>
+            <result property="inventory_count" column="inventory_count" jdbcType="OTHER"/>
+            <result property="frozen_count" column="frozen_count" jdbcType="OTHER"/>
+            <result property="material_spec" column="material_spec" jdbcType="VARCHAR"/>
+            <result property="material_unit" column="material_unit" jdbcType="VARCHAR"/>
+            <result property="quality" column="quality" jdbcType="OTHER"/>
+            <result property="min_stock" column="min_stock" jdbcType="OTHER"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="warehouse_type" column="warehouse_type" jdbcType="VARCHAR"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        material_code,material_name,pallet_code,
+        location_code,batch,inventory_count,
+        frozen_count,material_spec,material_unit,
+        quality,min_stock,status,
+        warehouse_type,create_time,creator
+    </sql>
+</mapper>

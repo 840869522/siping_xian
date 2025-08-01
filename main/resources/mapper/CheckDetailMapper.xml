@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.CheckDetailMapper">
+
+    <update id="update4Check">
+        UPDATE t_check_detail
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="checkCount != null">
+                check_count += #{checkCount},
+            </if>
+            <if test="updater != null and checkCode != ''">
+                updater = #{updater},
+            </if>
+        </set>
+        <where>
+            <if test="checkCode != null and checkCode != ''">
+                and  check_code = #{checkCode}
+            </if>
+            <if test="materialCode != null and materialCode != ''">
+                and  material_code = #{materialCode}
+            </if>
+            <if test="batch != null and batch != ''">
+                and  batch = #{batch}
+            </if>
+            <if test="checkDetailId != null">
+                and  t_check_detail_id = #{checkDetailId}
+            </if>
+        </where>
+    </update>
+
+    <update id="update2checkCount">
+        UPDATE t_check_detail
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="checkCount != null">
+                check_count = check_count + #{checkCount},
+            </if>
+            <if test="updater != null and checkCode != ''">
+                updater = #{updater},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        <where>
+            <if test="checkCode != null and checkCode != ''">
+                and  check_code = #{checkCode}
+            </if>
+            <if test="materialCode != null and materialCode != ''">
+                and  material_code = #{materialCode}
+            </if>
+            <if test="batch != null and batch != ''">
+                and  batch = #{batch}
+            </if>
+            <if test="checkDetailId != null">
+                and  t_check_detail_id = #{checkDetailId}
+            </if>
+        </where>
+    </update>
+
+
+    <select id="queryCount" resultType="java.lang.Long">
+        SELECT
+            "count" ( 1 )
+        FROM
+            t_check_detail
+        <where>
+            <if test="checkCode != null and checkCode != ''">
+                and  check_code = #{checkCode}
+            </if>
+            <if test="status != null">
+                and  status != #{status}
+            </if>
+        </where>
+    </select>
+    <select id="queryMaterial" resultType="com.example.wmsmp.entity.CheckDetailBean">
+        SELECT
+        ti.material_code materialCode,
+        ti.material_name materialName,
+        ti.batch,
+        SUM ( ti.inventory_count ) inventoryCount
+        FROM
+        t_inventory ti
+        LEFT JOIN t_location_map tl ON tl.pallet_code = ti.pallet_code
+        <where>
+            <if test="materialCode != null and materialCode != ''">
+                and ti.material_code = #{materialCode}
+            </if>
+            <if test="batch != null and batch != ''">
+                and ti.batch = #{batch}
+            </if>
+            <if test="materialName != null and materialName != ''">
+                and ti.material_name = #{materialName}
+            </if
+            ><if test="warehouseName != null and warehouseName != ''">
+                and tl.warehouse = #{warehouseName}
+            </if>
+        </where>
+        GROUP BY
+        ti.material_code,
+        ti.material_name,
+        ti.batch
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.BaseEquipmentDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.base.BaseEquipmentDetail">
+        <id property="id" column="id" jdbcType="OTHER"/>
+        <result property="equipment_code" column="equipment_code" jdbcType="VARCHAR"/>
+        <result property="equipment_name" column="equipment_name" jdbcType="VARCHAR"/>
+        <result property="maintenance_date" column="maintenance_date" jdbcType="VARCHAR"/>
+        <result property="maintenance_content" column="maintenance_content" jdbcType="VARCHAR"/>
+        <result property="maintenance_person" column="maintenance_person" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,equipment_code,equipment_name,
+        maintenance_date,maintenance_content,maintenance_person,
+        status,remark,udf01,
+        udf02,udf03,udf04,
+        udf05,creator,create_time,
+        updater,update_time
+    </sql>
+</mapper>

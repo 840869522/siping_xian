@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.SysUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.system.SysUser">
+            <id property="login_name" column="login_name" jdbcType="VARCHAR"/>
+            <result property="user_name" column="user_name" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="role_name" column="role_name" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="OTHER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+            <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+            <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+            <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+            <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+            <result property="create_time" column="create_time" jdbcType="TIME"/>
+            <result property="updater" column="updater" jdbcType="VARCHAR"/>
+            <result property="update_time" column="update_time" jdbcType="TIME"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        login_name,user_name,password,
+        role_name,status,remark,
+        udf01,udf02,udf03,
+        udf04,udf05,creator,
+        create_time,updater,update_time
+    </sql>
+
+    <select id="search" resultType="com.example.wmsmp.entity.system.SysUser">
+        SELECT U.*, D.dic_display_value AS status_display_value
+        FROM public.sys_users U
+                 INNER JOIN public.sys_dictionary D ON U.status = D.dic_value
+        WHERE D.dic_name = 'sys_users'
+    </select>
+
+    <select id="searchBy" resultType="com.example.wmsmp.entity.system.SysUser">
+        SELECT U.*, D.dic_display_value AS status_display_value
+        FROM public.sys_users U INNER JOIN public.sys_dictionary D ON U.status=D.dic_value
+        where 1=1
+        <if test="login_name != null and login_name  != ''">
+            AND U.login_name = #{login_name}
+        </if>
+
+        <if test="user_name != null and user_name  != ''">
+            AND U.user_name = #{user_name}
+        </if>
+        <if test="role_name != null and role_name  != ''">
+            AND U.role_name = #{role_name}
+        </if>
+        <if test="status != null">
+            AND U.status = #{status}
+        </if>
+        AND D.dic_name='sys_users'
+    </select>
+
+    <insert id="insert" keyColumn="login_name" keyProperty="login_name"
+            parameterType="com.example.wmsmp.entity.system.SysUser" useGeneratedKeys="true">
+        insert into public.sys_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="login_name != null">login_name,</if>
+            <if test="user_name != null">user_name,</if>
+            <if test="password != null">password,</if>
+            <if test="role_name != null">role_name,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="udf01 != null">udf01,</if>
+            <if test="udf02 != null">udf02,</if>
+            <if test="udf03 != null">udf03,</if>
+            <if test="udf04 != null">udf04,</if>
+            <if test="udf05 != null">udf05,</if>
+            <if test="creator != null">creator,</if>
+            <if test="create_time != null">create_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="update_time != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="login_name != null">#{login_name,jdbcType=VARCHAR},</if>
+            <if test="user_name != null">#{user_name,jdbcType=VARCHAR},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+            <if test="role_name != null">#{role_name,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=OTHER},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+            <if test="udf01 != null">#{udf01,jdbcType=VARCHAR},</if>
+            <if test="udf02 != null">#{udf02,jdbcType=VARCHAR},</if>
+            <if test="udf03 != null">#{udf03,jdbcType=VARCHAR},</if>
+            <if test="udf04 != null">#{udf04,jdbcType=VARCHAR},</if>
+            <if test="udf05 != null">#{udf05,jdbcType=VARCHAR},</if>
+            <if test="creator != null">#{creator,jdbcType=VARCHAR},</if>
+            <if test="create_time != null">#{create_time,jdbcType=TIME},</if>
+            <if test="updater != null">#{updater,jdbcType=VARCHAR},</if>
+            <if test="update_time != null">#{update_time,jdbcType=TIME},</if>
+        </trim>
+    </insert>
+</mapper>

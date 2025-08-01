@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.FlowMapper">
+
+    <select id="queryInventoryCount" resultType="java.lang.Integer">
+        SELECT
+        "sum"(inventory_count) inventory_count
+        FROM
+        t_inventory
+        <where>
+            <if test="material_code != null and material_code != ''">
+                and material_code = #{material_code}
+            </if>
+            <if test="batch != null and batch != ''">
+                    and batch = #{batch}
+            </if>
+            <if test="pallet_code != null and pallet_code != ''">
+                and pallet_code = #{pallet_code}
+            </if>
+            <if test="cell_id != null and cell_id != ''">
+                and cell_id = #{cell_id}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.TaskDMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.task.D.TaskD">
+            <result property="id" column="id" jdbcType="OTHER"/>
+            <result property="task_no" column="task_no" jdbcType="VARCHAR"/>
+            <result property="location_code" column="location_code" jdbcType="VARCHAR"/>
+            <result property="task_type" column="task_type" jdbcType="VARCHAR"/>
+            <result property="pallet_code" column="pallet_code" jdbcType="VARCHAR"/>
+            <result property="prot_no" column="prot_no" jdbcType="OTHER"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+            <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+            <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+            <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+            <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updater" column="updater" jdbcType="VARCHAR"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="car_no" column="car_no" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,task_no,location_code,
+        task_type,pallet_code,prot_no,
+        status,udf01,udf02,
+        udf03,udf04,udf05,
+        creator,create_time,updater,
+        update_time,car_no
+    </sql>
+</mapper>

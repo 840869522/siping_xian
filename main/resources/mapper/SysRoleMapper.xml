@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.SysRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.system.SysRole">
+        <id property="role_id" column="role_id" jdbcType="OTHER"/>
+        <result property="role_name" column="role_name" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="component_id" column="component_id" jdbcType="VARCHAR"/>
+        <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="component_name" column="component_name" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="parent_id" column="parent_id" jdbcType="OTHER"/>
+        <result property="status" column="status" jdbcType="OTHER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,role_name,title,
+        component_id,component,component_name,
+        icon,parent_id,status,
+        remark,udf01,udf02,
+        udf03,udf04,udf05,
+        creator,create_time,updater,
+        update_time
+    </sql>
+    <select id="search" resultType="com.example.wmsmp.entity.system.SysRole">
+        SELECT U.*, D.dic_display_value AS status_display_value
+        FROM public.sys_role U
+                 INNER JOIN public.sys_dictionary D ON U.status = D.dic_value
+        WHERE D.dic_name = 'sys_role'
+    </select>
+
+    <select id="searchBy" resultType="com.example.wmsmp.entity.system.SysRole">
+        SELECT U.*, D.dic_display_value AS status_display_value
+        FROM public.sys_role U INNER JOIN public.sys_dictionary D ON U.status=D.dic_value
+        where 1=1
+
+        <if test="role_id != null  ">
+            AND U.role_id = #{role_id}
+        </if>
+
+        <if test="role_name != null and role_name  != ''">
+            AND U.role_name = #{role_name}
+        </if>
+        <if test="parent_id != null  ">
+            AND U.parent_id = #{parent_id}
+        </if>
+        <if test="status != null">
+            AND U.status = #{status}
+        </if>
+        AND D.dic_name='sys_role'
+        order By role_id Asc
+    </select>
+</mapper>

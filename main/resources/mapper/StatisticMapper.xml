@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.statistic.mapper.StatisticMapper">
+
+    <select id="materialChartOut" resultType="java.util.Map">
+        SELECT
+        t_out.material_name name,
+        SUM ( t_out.actual_count ) total
+        FROM
+        t_out_order_detail t_out
+        LEFT JOIN base_material b ON t_out.material_code = b.material_code
+        <where>
+            <if test="material_storage_area != null and material_storage_area != ''">
+                and b.material_storage_area =  #{material_storage_area}
+            </if>
+        </where>
+        GROUP BY
+        t_out.material_name
+        ORDER BY
+        total DESC
+        LIMIT 7
+    </select>
+
+    <select id="materialChartIn" resultType="java.util.Map">
+        SELECT
+        t_in.material_name name,
+        SUM ( t_in.actual_count ) total
+        FROM
+        t_in_order_detail t_in
+        LEFT JOIN base_material b ON t_in.material_code = b.material_code
+        <where>
+            <if test="material_storage_area != null and material_storage_area != ''">
+                and b.material_storage_area =  #{material_storage_area}
+            </if>
+        </where>
+        GROUP BY
+        t_in.material_name
+        ORDER BY
+        total DESC
+        LIMIT 7
+    </select>
+    <select id="taskCountP" resultType="java.lang.Long">
+        SELECT
+        COUNT( 1 )
+        FROM
+        t_task_p
+        <where>
+            <if test="type == 1">
+                AND task_type LIKE'%入库%'
+            </if>
+            <if test="type == 0">
+                AND task_type LIKE'%出库%'
+            </if>
+            <if test="taskType != null and taskType != ''">
+                and task_type = #{taskType}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="taskCountD" resultType="java.lang.Long">
+        SELECT
+        COUNT( 1 )
+        FROM
+        t_task_d
+        <where>
+            <if test="type == 1">
+                AND task_type LIKE'%入库%'
+            </if>
+            <if test="type == 0">
+                AND task_type LIKE'%出库%'
+            </if>
+            <if test="taskType != null and taskType != ''">
+                AND task_type  = #{taskType}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="taskCountX" resultType="java.lang.Long">
+        SELECT
+        COUNT( 1 )
+        FROM
+        t_task_x
+        <where>
+            <if test="type == 1">
+                AND task_type LIKE'%入库%'
+            </if>
+            <if test="type == 0">
+                AND task_type LIKE'%出库%'
+            </if>
+            <if test="taskType != null and taskType != ''">
+                AND task_type  = #{taskType}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="taskCountB" resultType="java.lang.Long">
+        SELECT
+        COUNT( 1 )
+        FROM
+        t_task_b
+        <where>
+            <if test="type == 1">
+                AND task_type LIKE'%入库%'
+            </if>
+            <if test="type == 0">
+                AND task_type LIKE'%出库%'
+            </if>
+            <if test="taskType != null and taskType != ''">
+                AND task_type  = #{taskType}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="queryCount" resultType="java.lang.Long">
+        SELECT
+        "count" ( 1 )
+        FROM
+        t_location_map
+        <where>
+            <if test="type == 1">
+                and pallet_code IS NOT NULL
+            </if>
+            <if test="type == 0">
+                and pallet_code IS NULL
+            </if>
+            <if test="material_storage_area != null and material_storage_area != ''">
+                and warehouse = #{material_storage_area}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="queryInventoryCount" resultType="java.util.Map">
+        SELECT "sum"(inventory_count) num,
+        b.material_name        materialName
+        FROM t_inventory ti
+        LEFT JOIN base_material b ON ti.material_code = b.material_code
+        <where>
+            <if test="material_storage_area != null and material_storage_area != ''">
+                and b.material_storage_area =  #{material_storage_area}
+            </if>
+        </where>
+        GROUP BY b.material_name
+        ORDER BY num DESC
+        <if test="limit != null and limit != ''">
+            LIMIT #{limit}
+        </if>
+    </select>
+    <select id="pieSuccesP" resultType="java.util.Map">
+        SELECT
+        status "name",
+        COUNT ( 1 ) "value"
+        FROM
+        t_task_p
+        <where>
+            <if test="equipment != null and equipment != ''">
+                and udf02 LIKE concat('%', #{equipment}, '%')
+            </if>
+            <if test="taskType != null and taskType != ''">
+                and task_type = #{taskType}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        GROUP BY
+        "name"
+        ORDER BY
+        "value" DESC
+    </select>
+    <select id="pieSuccesD" resultType="java.util.Map">
+        SELECT
+        status "name",
+        COUNT ( 1 ) "value"
+        FROM
+        t_task_d
+        <where>
+            <if test="equipment != null and equipment != ''">
+                and udf02 LIKE concat('%', #{equipment}, '%')
+            </if>
+            <if test="taskType != null and taskType != ''">
+                and task_type = #{taskType}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        GROUP BY
+        "name"
+        ORDER BY
+        "value" DESC
+    </select>
+    <select id="pieSuccesX" resultType="java.util.Map">
+        SELECT
+        status "name",
+        COUNT ( 1 ) "value"
+        FROM
+        t_task_x
+        <where>
+            <if test="equipment != null and equipment != ''">
+                and udf02 LIKE concat('%', #{equipment}, '%')
+            </if>
+            <if test="taskType != null and taskType != ''">
+                and task_type = #{taskType}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        GROUP BY
+        "name"
+        ORDER BY
+        "value" DESC
+    </select>
+    <select id="pieSuccesB" resultType="java.util.Map">
+        SELECT
+        status "name",
+        COUNT ( 1 ) "value"
+        FROM
+        t_task_b
+        <where>
+            <if test="equipment != null and equipment != ''">
+                and udf02 LIKE concat('%', #{equipment}, '%')
+            </if>
+            <if test="taskType != null and taskType != ''">
+                and task_type = #{taskType}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                AND create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        GROUP BY
+        "name"
+        ORDER BY
+        "value" DESC
+    </select>
+</mapper>

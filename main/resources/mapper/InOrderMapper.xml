@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.InOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.InOrder">
+        <id property="in_order_id" column="in_order_id" jdbcType="VARCHAR"/>
+        <result property="warehouse_name" column="warehouse_name" jdbcType="VARCHAR"/>
+        <result property="car_no" column="car_no" jdbcType="VARCHAR"/>
+        <result property="org_order" column="org_order" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="hesuankemu" column="hesuankemu" jdbcType="VARCHAR"/>
+        <result property="kufangmingcheng" column="kufangmingcheng" jdbcType="VARCHAR"/>
+        <result property="fawudanwei" column="fawudanwei" jdbcType="VARCHAR"/>
+        <result property="hetongbianhao" column="hetongbianhao" jdbcType="VARCHAR"/>
+        <result property="diaobodanhao" column="diaobodanhao" jdbcType="VARCHAR"/>
+
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        in_order_id,warehouse_name,order_type,
+        car_no,org_order,status,
+        udf01,udf02,udf03,
+        udf04,udf05,creator,
+        create_time,updater,update_time,
+        hesuankemu,kufangmingcheng,fawudanwei,
+        hetongbianhao,diaobodanhao
+    </sql>
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wmsmp.mapper.OutMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.wmsmp.entity.OutPick">
+        <id property="id" column="id" jdbcType="OTHER"/>
+        <result property="out_pick_type" column="out_pick_type" jdbcType="VARCHAR"/>
+        <result property="pallet_code" column="pallet_code" jdbcType="VARCHAR"/>
+        <result property="cell_id" column="cell_id" jdbcType="VARCHAR"/>
+        <result property="pick_qty" column="pick_qty" jdbcType="OTHER"/>
+        <result property="out_order_id" column="out_order_id" jdbcType="VARCHAR"/>
+        <result property="out_order_detail_id" column="out_order_detail_id" jdbcType="OTHER"/>
+        <result property="inventory_id" column="inventory_id" jdbcType="OTHER"/>
+        <result property="material_code" column="material_code" jdbcType="VARCHAR"/>
+        <result property="material_name" column="material_name" jdbcType="VARCHAR"/>
+        <result property="pickstation_no" column="pickstation_no" jdbcType="VARCHAR"/>
+        <result property="target_no" column="target_no" jdbcType="VARCHAR"/>
+        <result property="batch" column="batch" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="udf01" column="udf01" jdbcType="VARCHAR"/>
+        <result property="udf02" column="udf02" jdbcType="VARCHAR"/>
+        <result property="udf03" column="udf03" jdbcType="VARCHAR"/>
+        <result property="udf04" column="udf04" jdbcType="VARCHAR"/>
+        <result property="udf05" column="udf05" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,out_pick_type,pallet_code,
+        pick_qty,out_order_id,out_order_detail_id,
+        material_code,material_name,pickstation_no,
+        target_no,batch,status,
+        udf01,udf02,udf03,
+        udf04,udf05,creator,
+        create_time,updater,update_time
+    </sql>
+
+</mapper>
