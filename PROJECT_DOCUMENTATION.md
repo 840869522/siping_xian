@@ -56,57 +56,121 @@
 
 ## 2. 核心实体与关系
 
-本节将介绍项目中的核心数据实体及其之间的关系。
+本节将详细介绍项目中的核心数据实体及其字段。
 
 ### 2.1 `entity` (核心业务实体)
 
-- **`InOrder` / `OutOrder`**: 入库/出库订单头信息。
-- **`InOrderDetail` / `OutOrderDetail`**: 入库/出库订单的明细。
-- **`Inventory`**: 库存信息，记录物料在特定载具上的数量和状态。
-- **`OutPick`**: 出库配盘信息，记录了为出库单分配的具体库存和数量。
-- **`CheckBean` / `CheckDetailBean`**: 库存盘点单和盘点明细。
-- **`Flow`**: 操作流水记录。
-- **`LocationMap`**: 货位与托盘的绑定关系。
-- **`InOrderExcel` / `OutOrderExcel`**: 用于导入/导出订单的Excel数据模型。
-- **`VMapInv` / `VSelectDplocation`**: 数据库视图对应的实体，用于复杂的关联查询。
+#### InOrder (入库单)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| in_order_id | String | 入库单号 (主键) |
+| warehouse_name | String | 仓库名称 |
+| order_type | String | 订单类型 |
+| car_no | String | 车牌号 |
+| org_order | String | 原始单号 |
+| status | String | 单据状态 (1:创建中, 2:已审核, 3:收货中, 4:已完成) |
+| creator | String | 创建人 |
+| create_time | Date | 创建时间 |
+
+#### InOrderDetail (入库单明细)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| in_order_detail_id | Integer | 入库单明细ID (主键) |
+| in_order_id | String | 入库单ID (外键) |
+| material_code | String | 物料编号 |
+| material_name | String | 物料名称 |
+| order_count | Integer | 订单数量 |
+| actual_count | Integer | 已收货数量 |
+| batch | String | 批次 |
+| status | String | 状态 (1:执行中, 2:已完成) |
+
+#### OutOrder (出库单)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| out_order_id | String | 出库单号 (主键) |
+| order_type | String | 订单类型 |
+| car_no | String | 车牌号 |
+| org_order | String | 原始单号 |
+| status | String | 状态 (1:创建中, 2:待审核, 3:已配盘, 4:已完成) |
+
+#### OutOrderDetail (出库明细表)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| out_order_detail_id | Integer | 出库单明细ID (主键) |
+| out_order_id | String | 出库单ID (外键) |
+| material_code | String | 物料编号 |
+| order_count | Integer | 订单数量 |
+| actual_count | Integer | 已出库数量 |
+| pick_count | Integer | 已配盘数量 |
+| status | String | 状态 (1:执行中, 2:已完成) |
+
+#### Inventory (库存)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| inventory_id | Integer | id (主键) |
+| pallet_code | String | 载具编号 |
+| cell_id | String | 载具格子号 |
+| material_code | String | 物料编号 |
+| batch | String | 批次 |
+| inventory_count | Integer | 库存数量 |
+| frozen_count | Integer | 冻结数量 |
+| out_order_id | String | 出库订单号 |
+
+---
 
 ### 2.2 `entity.base` (基础数据实体)
 
-- **`BaseMaterial`**: 物料主数据，定义了物料的各种属性。
-- **`BasePallet`**: 载具（托盘）主数据。
-- **`BaseEquipment` / `BaseEquipmentDetail`**: 设备及其保养/维修记录。
-- **`BaseETag`**: 电子标签与货位/料箱的绑定关系。
+#### BaseMaterial (物料基础表)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| id | Integer | ID (主键) |
+| material_code | String | 物料编号 |
+| material_name | String | 物料名称 |
+| material_type | String | 类别 |
+| material_spec | String | 规格 |
+| material_unit | String | 单位 |
+| min_stock | Integer | 最小库存 |
 
-### 2.3 `entity.system` (系统管理实体)
+#### BasePallet (载具基础数据)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| id | Integer | ID (主键) |
+| pallet_code | String | 载具编号 |
+| isprint | String | 是否打印 |
+| status | String | 状态 |
 
-- **`SysUser`**: 系统用户。
-- **`SysRole`**: 用户角色及权限（菜单）。
-- **`SysDictionary`**: 数据字典。
-- **`InterReturn` / `ResReturn`**: API的标准返回格式。
+---
 
-### 2.4 `entity.task` (自动化任务实体)
+### 2.3 `entity.task` (自动化任务实体)
 
 此包下的实体用于定义与WCS（仓库控制系统）交互的任务数据结构。
 
-- **`task.AGV` / `task.CTU`**: 分别定义了与AGV（自动导引车）和CTU（箱式堆垛机）相关的任务、状态和位置信息。
-- **`task.D`**: 与大件库（D库）相关的任务实体。
-- **`task.X`**: 与箱组库（X库）相关的任务实体。
-- **`task.Z`**: 这是一个总的自动化任务包，定义了与各种自动化设备交互的通用任务结构，如：
-    - `TaskB`: 料箱库任务。
-    - `TaskP`: 托盘库任务。
-    - `ZTask`: 通用的WCS任务下发结构。
-    - `ZTaskLight1`/`ZTaskLight2`: 电子标签亮灯任务。
-    - `ZTaskSorter1`/`ZTaskSorter2`: 分拣机任务。
+#### TaskB (自动料箱库任务表)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| id | Integer | id (主键) |
+| task_no | String | 任务号 |
+| warehouse | String | 库名 |
+| location_code | String | 货位号 |
+| task_type | String | 任务类型 |
+| pallet_code | String | 载具编号 |
+| prot_no | String | 站台编号 |
+| status | String | 状态 |
 
-### 2.5 实体关系
+#### TaskP (自动托盘库任务表)
+| 字段名 | 类型 | 说明 |
+|---|---|---|
+| id | Integer | id (主键) |
+| task_no | String | 任务号 |
+| warehouse | String | 库名 |
+| location_code | String | 货位号 |
+| task_type | String | 任务类型 "出库", "入库", "回库", "满入入库" |
+| pallet_code | String | 载具编号 |
+| prot_no | String | 站台编号 |
+| status | String | 状态 |
 
-- **订单与库存**:
-  - 入库单 (`InOrder`) 完成后，其明细 (`InOrderDetail`) 会转化为库存 (`Inventory`) 的增加。
-  - 出库单 (`OutOrder`) 会触发配盘 (`OutPick`)，配盘会冻结 `Inventory` 中的库存，出库完成后库存减少。
-- **基础数据与业务**:
-  - 所有业务实体都依赖于基础数据实体，如 `BaseMaterial` 和 `BasePallet`。
-- **任务与业务**:
-  - 审核通过的订单（入库/出库/盘点）会转化为具体的自动化任务（如 `TaskB`, `TaskP` 等），由WCS执行。
+---
+*（注：为保持文档简洁，此处仅列出部分关键实体和字段。其他实体如 `CheckBean`, `Flow`, `TaskD`, `TaskX` 等遵循类似的结构。）*
 
 ## 3. 主要业务流程
 
@@ -176,7 +240,7 @@
 - **作用**: 这是系统的“大脑”和“双手”，负责与物理世界的仓库硬件进行交互。
 - **推断功能**:
   - **任务调度**: 根据审核通过的订单，创建并调度硬件任务（例如，AGV搬运、堆垛机存取）。
-  - **硬件通信**: `Thread...java` 文件（如 `ThreadB`, `ThreadD`）暗示了系统为不同类型的设备或流程（可能对应不同的库区，如B库、D库）维护着独立的通信线程。这允许系统与硬件进行并行的、实时的状态更新和指令发送。
+  - **硬件通信**: `Thread...java` 文件（如 `ThreadB.java`, `ThreadD.java`）暗示了系统为不同类型的设备或流程（可能对应不同的库区，如B库、D库）维护着独立的通信线程。这允许系统与硬件进行并行的、实时的状态更新和指令发送。
   - **路径规划与执行**: 对于AGV等移动设备，此模块可能还包含路径规划和任务执行监控的逻辑。
 
 ### 4.2 LED 集成
