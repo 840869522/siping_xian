@@ -29,9 +29,9 @@
 
 1.  **WCS (仓库控制系统)**：这是连接WMS和大型自动化设备（如传送带、堆垛机）的“翻译官”。我们对接了两家供应商的WCS：
     *   **“Z”系统**：负责控制**托盘库(P库)**的**堆垛机**（在货架间移动托盘的大型设备）和**料箱库(B库)**的**穿梭车**（在货架内高速移动料箱的设备）。
-    *   **“速锐”系统**：负责控制**大件库(D库)**的自动化设备。
+    *   **“速锐”系统**：负责控制**大件库(D库)**的**自动化输送与存取系统**。
 
-2.  **PLC (可编程逻辑控制器)**：这是工业设备的“大脑”。对于一些标准化的、独立的设备，我们不经过WMS，而是直接与其PLC通信。
+2.  **PLC (可编程逻辑控制器)**：这是工业设备的“大脑”。对于一些标准化的、独立的设备，我们不经过WCS，而是直接与其PLC通信。
     *   **智能货柜 (Vertical Lift Module)**：一种高密度存储设备，像一个巨大的垂直抽屉柜，能根据指令自动将存有物料的托盘送到操作口。我们通过**西门子S7工业协议**直接控制它。
 
 核心的WMS业务逻辑（如出库配盘）是统一的，但最终需要执行这些业务的物理设备接口却是五花八门，API协议、数据格式、通信方式各不相同。
@@ -163,11 +163,10 @@
     ```
     **我的思考**：直接与PLC交互风险很高，必须将**安全性**放在首位。因此，我设计的`getplc()`前置检查方法是整个方案的基石，它确保了我们只在设备处于安全、就绪的状态下才下发指令，避免了物理损坏和安全事故。这种对底层硬件交互的深度理解和严谨设计，是这个模块成功的关键。
 
-#### 3. 解决关键技术挑战：流量控制
+#### 3. 解决关键技术挑战：流量控制与依赖注入
 
-*   **遇到的问题**：在压力测试中，当出库波次很大时，WMS瞬间产生上百个任务，导致下游WCS因处理不过来而拒绝请求，或导致任务堆积。
+*   **遇到的问题1：WCS拥堵**：在压力测试中，当出库波次很大时，WMS瞬间产生上百个任务，导致下游WCS因处理不过来而拒绝请求，或导致任务堆积。
 *   **我的思考与解决**：我在适配器线程的循环逻辑中增加了一个**动态流量控制机制**。在下发新任务前，线程会先查询任务表中状态为“已下发”（即WCS已接收但未反馈完成）的记录数。如果该数量超过了一个可配置的阈值，线程就会`continue`跳过本次循环，暂停下发。
-
     ```java
     // wcs/ThreadB.java -> run()
 
@@ -181,6 +180,31 @@
     // ... 继续执行下发逻辑 ...
     ```
     **我的思考**：这形成了一个**基于数据库的、自适应的缓冲队列**，它以极低的成本实现了强大的流量控制，有效避免了WCS过载。
+
+*   **遇到的问题2：非Spring Bean的依赖注入**：由于我的适配器线程（`Thread`子类）是手动`new`出来并启动的，它们不归Spring容器管理，因此无法使用`@Autowired`注入`TaskBService`等必要的服务。
+*   **我的思考与解决**：为了解决这个解耦架构中的核心难题，我编写了`config/SpringUtil.java`工具类。它通过实现`ApplicationContextAware`接口，在应用启动时静态地持有了Spring的`ApplicationContext`。然后，它提供了一个全局静态方法`getBean()`。
+    ```java
+    // config/SpringUtil.java
+    public final class SpringUtil implements ApplicationContextAware {
+        private static ApplicationContext applicationContext = null;
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            if (SpringUtil.applicationContext == null) {
+                SpringUtil.applicationContext = applicationContext;
+            }
+        }
+
+        public static <T> T getBean(Class<T> clazz) {
+            return getApplicationContext().getBean(clazz);
+        }
+    }
+
+    // wcs/ThreadB.java -> run()
+    TaskBService taskBService = SpringUtil.getBean(TaskBService.class);
+    Environment environment = SpringUtil.getBean(Environment.class);
+    ```
+    **我的思考**：这个工具类成为了连接“非Spring管理世界”和“Spring容器世界”的关键桥梁。它使得我的适配器线程既能保持独立运行，又能方便地获取到任何需要的服务依赖，是整个任务调度引擎能够成功运作的基石。
 
 ### Result (成果)
 
